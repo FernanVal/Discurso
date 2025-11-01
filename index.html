@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro Discurso Especial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #f0f0f0;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #1a1a1a;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #6a00ff 0%, #8e2de2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            border-bottom: 2px solid #444;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .speech-container {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            background: #1a1a1a;
+        }
+        
+        .controls-container {
+            flex: 0 0 300px;
+            background-color: #2d2d2d;
+            padding: 25px;
+            border-left: 1px solid #444;
+        }
+        
+        .speech-text {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #e8e8e8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .speech-text p {
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+        
+        .interactive-word {
+            color: #bb86fc;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            position: relative;
+            border-bottom: 2px dotted #bb86fc;
+            background-color: rgba(187, 134, 252, 0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .interactive-word:hover {
+            background-color: rgba(187, 134, 252, 0.3);
+            transform: translateY(-2px);
+            color: #ffffff;
+        }
+        
+        .interactive-word.playing {
+            background-color: #bb86fc;
+            color: #000000;
+            animation: pulse 1.5s infinite;
+            border-bottom: 2px solid transparent;
+            font-weight: bold;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(187, 134, 252, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(187, 134, 252, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(187, 134, 252, 0); }
+        }
+        
+        .controls-panel {
+            background: #333333;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 25px;
+            border: 1px solid #444;
+        }
+        
+        .controls-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #bb86fc;
+            border-bottom: 2px solid #444;
+            padding-bottom: 10px;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .control-group {
+            margin-bottom: 20px;
+        }
+        
+        .control-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #bb86fc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #6a00ff 0%, #8e2de2 100%);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-right: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 3px 8px rgba(106, 0, 255, 0.4);
+            border: 1px solid #555;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(106, 0, 255, 0.6);
+            background: linear-gradient(90deg, #7a1fff 0%, #9e3df2 100%);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            background: #555555;
+            color: #888;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            border: 1px solid #666;
+        }
+        
+        .volume-control {
+            width: 100%;
+            margin: 10px 0;
+            accent-color: #bb86fc;
+            background: #444;
+            border-radius: 10px;
+        }
+        
+        .status {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #2a2a2a;
+            font-size: 0.95rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .song-list {
+            background-color: #1a1f2e;
+            padding: 18px;
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-bottom: 25px;
+            border-left: 5px solid #6a00ff;
+            color: #e0e0ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .song-list h3 {
+            color: #bb86fc;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .song-list ol {
+            padding-left: 20px;
+        }
+        
+        .song-list li {
+            margin-bottom: 8px;
+            color: #d0d0ff;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #aaa;
+            font-size: 0.9rem;
+            border-top: 1px solid #444;
+            margin-top: 20px;
+            background-color: #2d2d2d;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .heart {
+            color: #ff6b6b;
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Mejoras de contraste para mejor legibilidad */
+        .speech-text strong {
+            color: #ffffff;
+        }
+        
+        .speech-text em {
+            color: #cccccc;
+        }
+        
+        input[type="range"]::-webkit-slider-track {
+            background: #444;
+            border-radius: 10px;
+        }
+        
+        input[type="range"]::-moz-range-track {
+            background: #444;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .controls-container {
+                border-left: none;
+                border-top: 1px solid #444;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            body {
+                padding: 10px;
+                background: #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>Celebrando Nuestra Historia</h1>
+                <p class="subtitle">Una celebración de amor, amistad y momentos compartidos</p>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="speech-container">
+                <div class="song-list">
+                    <h3>Canciones anexadas</h3>
+                    <ol>
+                        <li>Amorcito corazón - Pedro Infante</li>
+                        <li>Si Dios me quita la vida - Javier Solis</li>
+                        <li>Caminos de Michoacán - Federico Villa</li>
+                        <li>Adoro - Armando Manzanero</li>
+                        <li>Abrázame muy fuerte - Juan Gabriel</li>
+                        <li>Bésame mucho - Andrea Bocelli</li> 
+                        <li>Que no se rompa la noche - Julio Iglesias</li>
+                        <li>Por amarte tanto - Guillermo Davila</li>
+                        <li>Órale - Rocio Durcal</li>
+                    </ol>
+                </div>
+                
+                <div class="speech-text">
+                    <p>
+                        Hola, ¿cómo están, cómo se encuentran, cómo se sienten en esta tarde?
+                        Buenas tardes a todos, amigos, compadres, familia, el día de hoy es un honor tenerlos aquí, 
+                        compartiendo estos momentos y recibir de ustedes el regalo más preciado, su tiempo.
+                    </p>
+                    
+                    <p>
+                        El tiempo es sin lugar a duda uno de los tesoros más grandes que como seres humanos debemos 
+                        y tenemos que atesorar y el hecho de que hoy estemos juntos nos da la oportunidad de decirle 
+                        a Dios, gracias por un año más de vida, un año más juntos, un año más de contar con su 
+                        amistad y amor y un año más de momentos maravillosos. Gracias, hoy, mañana y siempre.
+                    </p>
+                    
+                    <p>
+                        Este día decidimos festejar nuestros cumpleaños en su compañía. El día de hoy cumplimos algunos años, 
+                        bueno yo más que ella y sí, solo algunos ya que seguimos siendo unos chicuelos 
+                        con la ilusión de un mañana.
+                    </p>
+                    
+                    <p>
+                        Junto a mi Amor, mi novia, mi pareja, mi esposa, mi cómplice y mi confidente etc…, 
+                        ella es la persona que más Amo en este mundo, y como saben yo no canto por ello escuchemos 
+                        <span class="interactive-word" data-audio="audio/amorcito-corazon.mp3">(AMORCITO CORAZÓN)</span>, 
+                        con su letra sencilla nos dice lo que sentimos al ver a la persona amada.
+                    </p>
+                    
+                    <p>
+                        A través del tiempo hemos pasado por un sin número de momentos, bellos, felices, maravilloso y algunos 
+                        realmente difíciles, complicados y tristes, pero en todo momento tenemos el deseo de seguir juntos y 
+                        disfrutar cada momento Dios nos siga bendiciendo así.
+                    </p>
+                    
+                    <p>
+                        Si escuchan atentamente la letra de la siguiente canción sabrán que refleja un poquito de lo 
+                        celosos que podemos llegar a ser mutuamente 
+                        <span class="interactive-word" data-audio="audio/si-dios-me-quita-la-vida.mp3">(SI DIOS ME QUITA LA VIDA)</span>.
+                    </p>
+                    
+                    <p>
+                        Un recuerdo muy bello que tenemos fue, el primer viaje que hicimos ya casados. Este fue a la ciudad de 
+                        Morelia, Michoacán, una ciudad que es muy bonita y con mucha historia, limpia y su gente amable y sencilla, 
+                        por ello la canción 
+                        <span class="interactive-word" data-audio="audio/caminos-de-michoacan.mp3">(CAMINOS DE MICHOACAN)</span> 
+                        guarda para nosotros un bello recuerdo, y de gran enseñanza ya que se nos acabo el dinero y ahora si como 
+                        titulo de película el regreso por la libre. Compramos las primeras lámparas que tuvimos, por cierto, 
+                        ese día no comimos, solo unos churrumais y una coca (nuestra fiel compañera).
+                    </p>
+                    
+                    <p>
+                        Queridos amigos, juntos hemos tenido mil aventuras, bueno un poco menos, mil cien, pero siempre en 
+                        complicidad confiando totalmente el uno en el otro. Así escucharemos la siguiente canción que nos 
+                        recuerda el por qué nos enamoramos, 
+                        <span class="interactive-word" data-audio="audio/adoro.mp3">(ADORO)</span>.
+                    </p>
+                    
+                    <p>
+                        A mi único y gran amor, le he dicho, no sé que hice bien, pero el regalo que me dio Dios, de vivir 
+                        junto a ti nunca lo podré pagar, ella me ha respondido, 
+                        <span class="interactive-word" data-audio="audio/abrazame-muy-fuerte.mp3">(Abrázame muy fuerte)</span>. 
+                        Una canción fuerte, intensa, de gran verdad, pero también de un gran amor.
+                    </p>
+                    
+                    <p>
+                        Como todos ustedes saben nos gusta viajar, lejos, cerca, no importa, lo importante es estar juntos 
+                        el mayor tiempo posible. Yo estoy muy feliz, muy enamorado y pleno y siempre le pido besitos muchos 
+                        besitos y apapachos que alimentan el cuerpo y el alma 
+                        <span class="interactive-word" data-audio="audio/besame-mucho.mp3">(BÉSAME MUCHO)</span>.
+                    </p>
+                    
+                    <p>
+                        Todos ustedes saben y no es secreto que nos amamos mutuamente y que Dios nos dio por pareja al mejor 
+                        ser humano que podía darnos, cuando se está pleno, pedimos cosas imposibles pero que nos encantaría 
+                        se hicieran realidad 
+                        <span class="interactive-word" data-audio="audio/que-no-se-rompa-la-noche.mp3">(QUE NO SE ROMPA LA NOCHE)</span>.
+                    </p>
+                    
+                    <p>
+                        Saben, Yola es increíble, lo saben, es simplemente ella y nos ha dicho a muchos, verdad profe, 
+                        que si ella escribiera canciones esta sin duda ella la abría creado para mí, dirán hay si, 
+                        pero si la escuchan con atención entenderán el por qué, esta canción la escribiría ella para mi 
+                        <span class="interactive-word" data-audio="audio/por-amarte-tanto.mp3">(POR AMARTE TANTO)</span>.
+                    </p>
+                    
+                    <p>
+                        Ella me preguntó hace unos días por qué estás junto a mi, si yo no soy como tú, no sé compartir, 
+                        como lo haces tú, no sé amar como lo haces tú, agregó te amo y muy a su estilo hizo una broma de 
+                        lo antes comentado y me dijo 
+                        <span class="interactive-word" data-audio="audio/orale.mp3">(ÓRALE)</span>.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="controls-container">
+                <div class="controls-panel">
+                    <h2 class="controls-title">Controles de Audio</h2>
+                    
+                    <div class="control-group">
+                        <label class="control-label">Reproducción</label>
+                        <button id="pauseBtn" class="btn" disabled>⏸️ Pausar</button>
+                        <button id="resumeBtn" class="btn" disabled>▶️ Reanudar</button>
+                        <button id="stopBtn" class="btn" disabled>⏹️ Detener</button>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label">Volumen</label>
+                        <input type="range" id="volumeSlider" class="volume-control" min="0" max="1" step="0.1" value="0.7">
+                        <div id="volumeValue">70%</div>
+                    </div>
+                    
+                    <div class="status" id="status">
+                        No se está reproduciendo ningún audio. Haz clic en una canción para comenzar.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>FernanVal <span class="heart"> © </span>2025</p>
+        </footer>
+    </div>
+
+    <script>
+    // Variables globales
+    let audioActual = null;
+    let palabraActual = null;
+    let estaPausado = false;
+    
+    // Elementos del DOM
+    const palabrasInteractivas = document.querySelectorAll('.interactive-word');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const resumeBtn = document.getElementById('resumeBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeValue = document.getElementById('volumeValue');
+    const statusElement = document.getElementById('status');
+    
+    // Inicializar controles
+    function actualizarControles() {
+        const hayAudio = audioActual !== null;
+        const reproduciendo = hayAudio && !audioActual.paused && !estaPausado;
+        
+        pauseBtn.disabled = !hayAudio || estaPausado || !reproduciendo;
+        resumeBtn.disabled = !hayAudio || !estaPausado;
+        stopBtn.disabled = !hayAudio;
+    }
+    
+    // Actualizar estado
+    function actualizarEstado(mensaje) {
+        statusElement.textContent = mensaje;
+    }
+    
+    // Reproducir audio
+    function reproducirAudio(palabra) {
+        // Si ya hay un audio reproduciéndose, detenerlo
+        if (audioActual) {
+            detenerAudio();
+        }
+        
+        const archivoAudio = palabra.getAttribute('data-audio');
+        
+        // Crear nuevo objeto de audio
+        audioActual = new Audio(archivoAudio);
+        audioActual.volume = volumeSlider.value;
+        
+        // Configurar eventos del audio
+        audioActual.addEventListener('loadeddata', function() {
+            palabraActual = palabra;
+            palabra.classList.add('playing');
+            estaPausado = false;
+            actualizarControles();
+            actualizarEstado(`Reproduciendo: ${archivoAudio}`);
+        });
+        
+        audioActual.addEventListener('ended', function() {
+            detenerAudio();
+            actualizarEstado('Reproducción finalizada.');
+        });
+        
+        audioActual.addEventListener('error', function() {
+            actualizarEstado(`Error: No se pudo cargar el archivo ${archivoAudio}`);
+            detenerAudio();
+        });
+        
+        // Iniciar reproducción
+        audioActual.play().catch(error => {
+            actualizarEstado(`Error al reproducir: ${error.message}`);
+        });
+    }
+    
+    // Pausar audio - CORREGIDO
+    function pausarAudio() {
+        if (audioActual && !audioActual.paused) {
+            audioActual.pause();
+            estaPausado = true;
+            actualizarControles();
+            actualizarEstado('Audio en pausa. Presiona "Reanudar" para continuar.');
+        }
+    }
+    
+    // Reanudar audio - CORREGIDO
+    function reanudarAudio() {
+        if (audioActual && estaPausado) {
+            audioActual.play().then(() => {
+                estaPausado = false;
+                actualizarControles();
+                actualizarEstado('Reanudando reproducción...');
+            }).catch(error => {
+                actualizarEstado(`Error al reanudar: ${error.message}`);
+            });
+        }
+    }
+    
+    // Detener audio
+    function detenerAudio() {
+        if (audioActual) {
+            audioActual.pause();
+            audioActual.currentTime = 0;
+            audioActual = null;
+            
+            if (palabraActual) {
+                palabraActual.classList.remove('playing');
+                palabraActual = null;
+            }
+            
+            estaPausado = false;
+            actualizarControles();
+        }
+    }
+    
+    // Ajustar volumen
+    function ajustarVolumen() {
+        const valor = volumeSlider.value;
+        volumeValue.textContent = `${Math.round(valor * 100)}%`;
+        
+        if (audioActual) {
+            audioActual.volume = valor;
+        }
+    }
+    
+    // Event Listeners
+    palabrasInteractivas.forEach(palabra => {
+        palabra.addEventListener('click', function() {
+            // Si se hace clic en la misma palabra que se está reproduciendo, no hacer nada
+            if (this === palabraActual && audioActual && !audioActual.paused) {
+                return;
+            }
+            
+            reproducirAudio(this);
+        });
+    });
+    
+    pauseBtn.addEventListener('click', pausarAudio);
+    resumeBtn.addEventListener('click', reanudarAudio);
+    stopBtn.addEventListener('click', detenerAudio);
+    volumeSlider.addEventListener('input', ajustarVolumen);
+    
+    // Inicializar controles al cargar la página
+    actualizarControles();
+</script>
